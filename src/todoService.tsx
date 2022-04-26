@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ITodo, ITodoService, IUser } from "./interfaces";
 
 const serviceContext = React.createContext({ token: "" });
-const serviceUrl = `${window.location.origin}/.netlify/functions/api-server`;
+const serviceUrl = `${window.location.origin}/.netlify/functions/api`;
 
 export const useTodoService: () => ITodoService = () => {
   const { token } = useContext(serviceContext);

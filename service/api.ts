@@ -27,7 +27,7 @@ const authzOptions = {
 const checkAuthz: express.Handler = jwtAuthz(authzOptions);
 
 const router = express.Router();
-const routerBasePath = isNetlify ? "/.netlify/functions/api-server" : "/";
+const routerBasePath = isNetlify ? "/.netlify/functions/api" : "/";
 
 const checkJwt: jwt.RequestHandler = jwt({
   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint

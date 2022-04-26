@@ -35,8 +35,8 @@
     "uuidv4": "^6.2.12"
   },
   "scripts": {
-    "start": "npm-run-all --parallel spa api-server",
-    "api-server": "ts-node service/api-server.ts",
+    "start": "npm-run-all --parallel spa api",
+    "api": "ts-node service/api.ts",
     "spa": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
