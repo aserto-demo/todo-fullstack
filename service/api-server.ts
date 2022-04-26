@@ -5,10 +5,14 @@ import cors = require("cors");
 import jwt = require("express-jwt");
 import jwksRsa = require("jwks-rsa");
 import aserto = require("express-jwt-aserto");
+import serverless = require("serverless-http");
+import { join } from "path";
 import { getUserByUserID } from "./directory";
 import { initDb, getTodos, insertTodo, updateTodo, deleteTodo } from "./store";
 import { UserCache, User } from "./interfaces";
 const { jwtAuthz } = aserto;
+
+const isNetlify = process.env.NETLIFY || process.env.REACT_APP_NETLIFY;
 
 const authzOptions = {
   authorizerServiceUrl:
@@ -21,6 +25,9 @@ const authzOptions = {
 
 //Aserto authorizer middleware function
 const checkAuthz: express.Handler = jwtAuthz(authzOptions);
+
+const router = express.Router();
+const routerBasePath = isNetlify ? "/.netlify/functions/api-server" : "/";
 
 const checkJwt: jwt.RequestHandler = jwt({
   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint
@@ -41,7 +48,7 @@ const app: express.Application = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 //Users cache
 const users: UserCache = {};
@@ -96,8 +103,19 @@ app.delete("/todo/:ownerID", checkJwt, checkAuthz, async (req, res) => {
   }
 });
 
+app.use(routerBasePath, router);
+
 initDb().then(() => {
   app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
   });
+
+  if (isNetlify) {
+    exports.handler = serverless(app);
+  } else {
+    // main endpoint serves react bundle from /build
+    app.use(express.static(join(__dirname, "..", "build")));
+
+    app.listen(PORT, () => console.log(`API Server listening on port ${PORT}`));
+  }
 });
