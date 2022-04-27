@@ -1,5 +1,5 @@
-[build]
-  functions = "service"
+[functions]
+  included_files = ["service/api-server.ts"]
 
 [[redirects]]
   from = "/*"
