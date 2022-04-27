@@ -1,5 +1,5 @@
 [functions]
-  included_files = ["service/api-server.ts"]
+  included_files = ["service/api.ts"]
 
 [[redirects]]
   from = "/*"
