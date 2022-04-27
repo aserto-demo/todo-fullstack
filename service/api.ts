@@ -53,16 +53,16 @@ const PORT = process.env.PORT || 3001;
 //Users cache
 const users: UserCache = {};
 
-app.get("/user/:userID", checkJwt, checkAuthz, async (req, res) => {
-  const { userID } = req.params;
-  const user: User = users[userID]
-    ? users[userID]
-    : await getUserByUserID(userID);
+// app.get("/user/:userID", checkJwt, checkAuthz, async (req, res) => {
+//   const { userID } = req.params;
+//   const user: User = users[userID]
+//     ? users[userID]
+//     : await getUserByUserID(userID);
 
-  //Fill cache
-  users[userID] = user;
-  res.json(user);
-});
+//   //Fill cache
+//   users[userID] = user;
+//   res.json(user);
+// });
 
 app.get("/todos", checkJwt, checkAuthz, async (req, res) => {
   try {
@@ -83,25 +83,25 @@ app.post("/todo", checkJwt, checkAuthz, async (req, res) => {
   }
 });
 
-app.put("/todo/:ownerID", checkJwt, checkAuthz, async (req, res) => {
-  const todo: Todo = req.body;
-  try {
-    await updateTodo(todo);
-    res.json({ msg: "Todo updated" });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// app.put("/todo/:ownerID", checkJwt, checkAuthz, async (req, res) => {
+//   const todo: Todo = req.body;
+//   try {
+//     await updateTodo(todo);
+//     res.json({ msg: "Todo updated" });
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
-app.delete("/todo/:ownerID", checkJwt, checkAuthz, async (req, res) => {
-  const todo: Todo = req.body;
-  try {
-    deleteTodo(todo);
-    res.json({ msg: "Todo deleted" });
-  } catch (e) {
-    res.status(500).send(e);
-  }
-});
+// app.delete("/todo/:ownerID", checkJwt, checkAuthz, async (req, res) => {
+//   const todo: Todo = req.body;
+//   try {
+//     deleteTodo(todo);
+//     res.json({ msg: "Todo deleted" });
+//   } catch (e) {
+//     res.status(500).send(e);
+//   }
+// });
 
 app.use(routerBasePath, router);
 
